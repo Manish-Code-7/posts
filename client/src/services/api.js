@@ -26,3 +26,8 @@ export const fetchCommentsByPostId = async (id) => {
   const res = await fetch(`${BASE_URL}/posts/${id}/comments`);
   return handleResponse(res);
 };
+
+export const fetchComments = async () => {
+  const res = await fetch(`${BASE_URL}/comments`);
+  return handleResponse(res);
+};

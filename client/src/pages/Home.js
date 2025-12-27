@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { PostContext } from "../store/Postcontext";
-import { fetchPosts, fetchUsers } from "../services/api";
+import { fetchPosts, fetchUsers, fetchComments } from "../services/api";
 
 function Home() {
   const { posts, setPosts, users, setUsers } = useContext(PostContext);
@@ -12,7 +12,7 @@ function Home() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [showUsers, setShowUsers] = useState(false);
 
-  // Debounce search input
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchTerm);
@@ -25,9 +25,24 @@ function Home() {
       try {
         setLoading(true);
         setError(null);
-        const postsData = await fetchPosts();
-        const usersData = await fetchUsers();
-        setPosts(postsData);
+        const [postsData, usersData, commentsData] = await Promise.all([
+          fetchPosts(),
+          fetchUsers(),
+          fetchComments()
+        ]);
+
+        // build comment counts per postId
+        const counts = commentsData.reduce((acc, c) => {
+          acc[c.postId] = (acc[c.postId] || 0) + 1;
+          return acc;
+        }, {});
+
+        const postsWithCounts = postsData.map(p => ({
+          ...p,
+          commentsCount: counts[p.id] || 0
+        }));
+
+        setPosts(postsWithCounts);
         setUsers(usersData);
       } catch (err) {
         setError(err.message || "Failed to load posts");
@@ -195,8 +210,10 @@ function Home() {
           <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
             {users.map(user => (
               <li key={user.id} style={{ padding: '8px', background: '#fff', border: '1px solid #eee' }}>
-                <strong>{user.name}</strong><br />
-                <small>{user.email}</small>
+                <Link to={`/user/${user.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                  <strong>{user.name}</strong><br />
+                  <small>{user.email}</small>
+                </Link>
               </li>
             ))}
           </ul>
@@ -221,6 +238,7 @@ function Home() {
             <p>{post.body}</p>
             <p>
               <strong>Author:</strong> {getUserName(post.userId)}
+              <strong> Comments </strong> {post.commentsCount ? post.commentsCount : 0}
             </p>
             <Link to={`/post/${post.id}`}>View Details</Link>
           </div>

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import AboutPage from './pages/PostDetails';
+import ShowPosts from './pages/ShowPosts';
 import Layout from './components/Layout';
 import './App.css';
 
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/post/:id" element={<AboutPage />} />
+          <Route path="/user/:userId" element={<ShowPosts />} />
         </Routes>
       </Layout>
     </BrowserRouter>
