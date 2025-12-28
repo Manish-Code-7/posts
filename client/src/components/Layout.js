@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Breadcrumb from './Breadcrumb';
 
 const Layout = ({ children }) => {
     const location = useLocation();
@@ -12,8 +13,7 @@ const Layout = ({ children }) => {
                 alignItems: 'center',
                 padding: '1rem 2rem',
                 backgroundColor: '#ffffff',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                marginBottom: '2rem'
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                     <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#2c3e50' }}>Compegence App</h1>
@@ -32,6 +32,7 @@ const Layout = ({ children }) => {
                     </nav>
                 </div>
             </header>
+            <Breadcrumb />
             <main style={{ padding: '0 2rem', maxWidth: '1200px', margin: '0 auto' }}>
                 {children}
             </main>

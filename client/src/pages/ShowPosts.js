@@ -13,7 +13,7 @@ function ShowPosts() {
       const parsedUserId = parseInt(userId);
       const filteredPosts = posts.filter(post => post.userId === parsedUserId);
       const user = users.find(u => u.id === parsedUserId);
-      
+
       setUserPosts(filteredPosts);
       setCurrentUser(user);
     }
@@ -22,26 +22,15 @@ function ShowPosts() {
   if (!currentUser) {
     return <div style={{ padding: "20px" }}>
       <h3>Loading user information...</h3>
-      <Link to="/">← Back to Home</Link>
     </div>;
   }
 
   return (
     <div style={{ padding: "20px" }}>
-      <Link to="/" style={{ 
-        display: "inline-block", 
-        marginBottom: "20px",
-        textDecoration: "none",
-        color: "#3498db",
-        fontSize: "1rem"
-      }}>
-        ← Back to Home
-      </Link>
-      
-      <div style={{ 
-        marginBottom: "30px", 
-        padding: "20px", 
-        backgroundColor: "#f8f9fa", 
+      <div style={{
+        marginBottom: "30px",
+        padding: "20px",
+        backgroundColor: "#f8f9fa",
         borderRadius: "8px",
         border: "1px solid #dee2e6"
       }}>
@@ -90,16 +79,16 @@ function ShowPosts() {
               <p style={{ color: "#495057", lineHeight: "1.6" }}>
                 {post.body}
               </p>
-              <div style={{ 
-                display: "flex", 
-                justifyContent: "space-between", 
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
                 marginTop: "10px"
               }}>
                 <span style={{ color: "#6c757d", fontSize: "0.9rem" }}>
                   💬 {post.commentsCount || 0} comments
                 </span>
-                <Link 
+                <Link
                   to={`/post/${post.id}`}
                   style={{
                     padding: "6px 12px",
